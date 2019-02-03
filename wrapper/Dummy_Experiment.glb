@@ -1,0 +1,104 @@
+%!GLoBES
+
+$version="3.0.0"
+
+/*
+ Trying to define my dummy experiment
+ */
+ 
+ 
+/* ####### Beam flux ####### */
+
+nuflux(#one)<
+@builtin = 2
+@parent_energy = 60	/* GeV */
+@stored_muons = 10.66e+20 
+@time = 4	/* years */
+>
+
+/* ####### Detector settings ####### */
+
+$target_mass = 	        50	/* kt (fiducial mass) */
+
+
+/* ####### Energy window ####### */
+
+$bins = 		20
+$emin = 	        4	/* GeV */
+$emax = 	        50	/* GeV */
+
+$sampling_points = 	20
+$sampling_min =         4	/* GeV */
+$sampling_max =         5	/* GeV */
+
+
+/* ######## Baseline setting ######## */
+$profiletype = 		3 
+$densitytab = 		{6.0}
+$lengthtab = 		{12740} /* km */
+
+/* ######## Technical information ######## */
+
+$filter_state = 	0
+$filter_value = 	   1000000
+
+
+energy(#ERES)<
+	@type = 1	
+	@sigma_e = {0.15,0,0}
+>
+
+
+/* ####### Cross sections ####### */
+
+cross(#CC)<
+	@cross_file = "XCC.dat"
+>
+
+cross(#NC)<
+	@cross_file = "XNC.dat"
+
+>
+
+
+/* ####### Energy dependent efficiencies ###### */
+
+%posteffs={0.,1.,1.}
+
+%energ={4.,20.,50.}
+
+%bc=bincenter()
+
+%inter=interpolation(%energ,%posteffs,1,%bc)
+
+
+/* ####### Channel definitions ####### */
+
+
+channel(#nu_mu_bar_appearance)<
+	@channel = 	#one:	-:	e:	m:	#CC:    #ERES
+	@post_smearing_efficiencies = copy(%inter)
+>
+channel(#nu_NC_bckg)<
+        @channel =      #one:   +:      NOSC_m: NOSC_m: #NC:    #ERES
+>
+
+
+/* ####### Setting the rules ####### */
+
+/* ORDER CHANGED BECAUSE OF DEGFINDER! */
+
+rule(#Nu_Mu_BAR_Disappearance)<
+	@signal =	      0.35@#nu_mu_bar_appearance
+	@signalerror =	     0.025  :	    0.0001
+
+	@background =	         1e-05@#nu_NC_bckg
+	@backgrounderror = 	     0.2    :	    0.0001
+	
+	@sys_on_function = 	"chiSpectrumTilt"
+	@sys_off_function = 	"chiNoSysSpectrum"
+
+>
+
+
+/**********************END**********************/
