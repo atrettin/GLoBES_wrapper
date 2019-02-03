@@ -51,4 +51,11 @@ You should see `GLoBES.so` file and now it should be ready to use.
 ## Testing the installation 
 
 Go to examples folder and change path in `plot_numubar.py` file to the location of the folder containitng `GLoBES.so`. 
-Then simply run the script, which should produce an oscillogram. 
+Then simply run the script, which should produce the following oscillogram: 
+
+
+<object data="https://github.com/terliuk/GLoBES_wrapper/raw/master/examples/probability_example.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="https://github.com/terliuk/GLoBES_wrapper/raw/master/examples/probability_example.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/terliuk/GLoBES_wrapper/raw/master/examples/probability_example.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
