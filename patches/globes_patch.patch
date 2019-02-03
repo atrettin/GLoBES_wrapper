@@ -1,0 +1,11 @@
+--- ./source/glb_probability.h.old	2015-08-24 13:55:58.000000002 +0200
++++ ./source/glb_probability.h	2015-08-24 13:56:48.000000002 +0200
+@@ -55,7 +55,7 @@
+ 
+ 
+ /* Functions */
+-inline void zhetrd3(double complex A[3][3], double complex Q[3][3],
++void zhetrd3(double complex A[3][3], double complex Q[3][3],
+                     double d[3], double e[2]);
+ int zheevc3(double complex A[3][3], double w[3]);
+ int zheevq3(double complex A[3][3], double complex Q[3][3], double w[3]);

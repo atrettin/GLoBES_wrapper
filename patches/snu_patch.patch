@@ -1,0 +1,56 @@
+--- snu.c.old	2011-01-14 20:55:01.000000002 +0100
++++ snu.c	2015-08-24 14:18:14.000000002 +0200
+@@ -89,9 +89,9 @@
+ #include "snu.h"
+ 
+ // Constants
+-#define GLB_V_FACTOR        7.5e-14    // Conversion factor for matter potentials
+-#define GLB_Ne_MANTLE       0.5        // Effective electron numbers for calculation
+-#define GLB_Ne_CORE         0.468      //   of MSW potentials
++#define GLB_V_FACTOR        7.6324e-14    // Conversion factor for matter potentials
++#define GLB_Ne_MANTLE       0.4957     // Effective electron numbers for calculation
++#define GLB_Ne_CORE         0.4656     //   of MSW potentials
+ #define RHO_THRESHOLD       0.001      // The minimum matter density below which
+                                        // vacuum algorithms are used
+ #define M_SQRT3  1.73205080756887729352744634151     // sqrt(3)
+@@ -109,6 +109,9 @@
+ #define MAX_ANGLES    ((MAX_FLAVORS * (MAX_FLAVORS-1))/2)
+ #define MAX_PHASES    (((MAX_FLAVORS-1)*(MAX_FLAVORS-2))/2)
+ 
++#define GLB_EV_TO_KM_FACTOR  1.973269718e-10
++#define GLB_KM_TO_EV(x)      ((x) / GLB_EV_TO_KM_FACTOR)
++#define GLB_EV_TO_KM(x)      ((x) * GLB_EV_TO_KM_FACTOR)
+ // Fundamental oscillation parameters
+ int n_flavors = 0;
+ int n_params  = 0;
+@@ -568,7 +571,7 @@
+             _n_flavors);
+     return -1;
+   }
+-
++  
+   // Number of oscillation parameters:
+   //   n (n-1)/2 mixing angles, (n-1)(n-2)/2 phases, n-1 mass squared differences
+   //   n^2 |\eps^s|, n^2 \phi^s,
+@@ -904,9 +907,18 @@
+ // ----------------------------------------------------------------------------
+ {
+   double inv_E = 1.0 / E;
+-  double Ve = cp_sign * rho * (GLB_V_FACTOR * GLB_Ne_MANTLE); // Matter potential
+-  double Vn = cp_sign * rho * (GLB_V_FACTOR * (1.0 - GLB_Ne_MANTLE) / 2.0);
+-
++  double Ve = 0.0;
++  double Vn = 0.0;
++  //printf("Density %f \n", rho );
++  if (rho < 7.0){
++    //printf("Density %f is smaller 7\n", rho );
++    Ve = cp_sign * rho * (GLB_V_FACTOR * GLB_Ne_MANTLE); // Matter potential
++    Vn = cp_sign * rho * (GLB_V_FACTOR * (1.0 - GLB_Ne_MANTLE) / 2.0);
++  } else {
++    //printf("Density %f is bigger than 7\n", rho );
++    Ve = cp_sign * rho * (GLB_V_FACTOR * GLB_Ne_CORE); // Matter potential
++    Vn = cp_sign * rho * (GLB_V_FACTOR * (1.0 - GLB_Ne_CORE) / 2.0);
++  }
+   double complex (*_H)[n_flavors]
+     = (double complex (*)[n_flavors]) gsl_matrix_complex_ptr(H, 0, 0);
+   double complex (*_H0_template)[n_flavors]
