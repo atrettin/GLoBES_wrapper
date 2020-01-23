@@ -5,9 +5,9 @@
 # and standard oscllations
 import os, sys
 import numpy as np
+import pdb
 
-
-globes_path = "/afs/ifh.de/user/t/terliuk/scratch/software/GLoBES_test_inst/GLoBES_wrapper/wrapper/"
+globes_path = "/afs/ifh.de/user/t/trettin/scratch/software/GLoBES_v401/GLoBES_wrapper/wrapper/"
 #XXX: put a folder containing GLoBES.so file
 sys.path.append(globes_path)
 import GLoBES
@@ -55,9 +55,9 @@ theta14 = 0.0
 theta24 = np.arcsin(np.sqrt(0.02))
 theta34 = np.arcsin(np.sqrt(0.0))
 #### GLoBES uses the following convention for mixing parameters, 2 last 0 are placeholders for sterile CP phases
-params = np.array( [theta12, theta13, theta23, 
-                    deltacp, DM21, DM31, 
-                    DM41, theta14,  theta24, theta34, 0.0, 0.0 ], dtype=float )
+params = [theta12, theta13, theta23, 
+          deltacp, DM21, DM31, 
+          DM41, theta14,  theta24, theta34, 0.0, 0.0 ]
 globes_calc.SetParametersArr(params )  ## Setting the parameters 
 globes_calc.PrintParameters()
 ######## 
@@ -69,19 +69,17 @@ flavout  = -14*np.ones_like(energies)
 # Getting the probability for the given directions
 # Using PDG MC encoding, the neutrino vs antineutrino is selected 
 # based on the sign of the initial flavor
-prob_numubar_numubar_sterile = globes_calc.MatterProbPDGArr(flavin,
-                             flavout, 
-                             energies, 
-                             costheta) 
+
+prob_numubar_numubar_sterile = [globes_calc.MatterProbPDG(int(fi), int(fo), float(en), float(ct))
+                                for fi, fo, en, ct in zip(flavin, flavout, energies, costheta)]
 ## Calculating probabilities for standard oscillations
-params = np.array( [theta12, theta13, theta23, 
-                    deltacp, DM21, DM31, 
-                    DM41, theta14,  0, 0, 0.0, 0.0 ], dtype=float )
-globes_calc.SetParametersArr(params ) 
-prob_numubar_numubar_std = globes_calc.MatterProbPDGArr(flavin,
-                             flavout, 
-                             energies, 
-                             costheta)
+params = [theta12, theta13, theta23, 
+          deltacp, DM21, DM31, 
+          DM41, theta14,  0, 0, 0.0, 0.0 ]
+globes_calc.SetParametersArr(params )
+
+prob_numubar_numubar_std = [globes_calc.MatterProbPDG(int(fi), int(fo), float(en), float(ct))
+                            for fi, fo, en, ct in zip(flavin, flavout, energies, costheta)]
 ### Making a plot
 import matplotlib 
 matplotlib.use('agg')

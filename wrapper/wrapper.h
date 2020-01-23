@@ -1,16 +1,7 @@
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <stdio.h>
-//#include <stdlib.h>
 #include <globes/globes.h>
 #include <boost/python.hpp> 
 #include <boost/shared_ptr.hpp>
-
 #include "boost/python/extract.hpp"
-#include "boost/python/numeric.hpp"
-
-#include <numpy/ndarrayobject.h>
-
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 extern "C" {
   #include <snu.h>
@@ -21,13 +12,12 @@ class GLoBESCalculator {
     GLoBESCalculator(std::string);
     void PrintParameters();
     void SetParameters(double, double, double, double, double, double); // th12, th13, th23, deltacp, dm21, dm31
-    void SetParametersArr(boost::python::numeric::array&); 
+    void SetParametersArr(boost::python::list&); 
     double VacuumProbability(int,int,int,double,double);
     // Matter probabilities
     double MatterProbability(int,int,int,double,double);
     double MatterProbabilityPrevBaseline(int,int,int,double);
     double MatterProbPDG(int,int,double,double);
-    boost::python::object MatterProbPDGArr(boost::python::numeric::array&, boost::python::numeric::array&, boost::python::numeric::array&, boost::python::numeric::array&);
     double CalcPropDist(double);
     void SetEarthModel(boost::python::list&, boost::python::list&);
     void SetManualDensities(boost::python::list&, boost::python::list&);
@@ -58,8 +48,6 @@ class GLoBESCalculator {
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 BOOST_PYTHON_MODULE(GLoBES)
 {
-  boost::python::numeric::array::set_module_and_type("numpy", "ndarray");
-  import_array();
   using namespace boost::python;
   class_<GLoBESCalculator>("GLoBESCalculator",  init<const std::string>())
     .def("SetParameters", &GLoBESCalculator::SetParameters)
@@ -73,7 +61,6 @@ BOOST_PYTHON_MODULE(GLoBES)
     .def("SetManualDensities", &GLoBESCalculator::SetManualDensities)
     .def("MatterProbability", &GLoBESCalculator::MatterProbability)
     .def("MatterProbPDG",&GLoBESCalculator::MatterProbPDG)
-    .def("MatterProbPDGArr",&GLoBESCalculator::MatterProbPDGArr)
     .def("GetBaselineInExperiment", &GLoBESCalculator::GetBaselineInExperiment)
     .def("SetDepth"  ,&GLoBESCalculator::SetDepth)
     .def("SetAtmoHeight", &GLoBESCalculator::SetAtmoHeight) 

@@ -141,7 +141,7 @@ void GLoBESCalculator::ApplyParameters(){
 /*
   Sets parameters for all neutrinos (standard + steriles)
 */
-void GLoBESCalculator::SetParametersArr(boost::python::numeric::array& params){
+void GLoBESCalculator::SetParametersArr(boost::python::list& params){
   if (len(params )> 12 | len(params) < 6)
     {std::cout<<"Too small or too big number of parameteres: "<<len(params )<<" !!!\n";
      return;}
@@ -222,32 +222,6 @@ double GLoBESCalculator::MatterProbPDG(int ini, int fin, double E ,double costh)
    return MatterProbability(m, l, pa,E, costh);
 }
 
-boost::python::object  GLoBESCalculator::MatterProbPDGArr(boost::python::numeric::array& ini, boost::python::numeric::array& fin,
-										  boost::python::numeric::array& E ,  boost::python::numeric::array& costh){
-   if ( !(len(ini) == len(fin) && len(ini)==len(E) && len(ini)==len(costh) &&
-         len(fin)==len(E) && len(fin)==len(costh) && len(E)==len(costh) )  ){
-     std::cout<<"All input arrays should have the same size!!!!! \n"; 
-     printf("Sizes : %i, %i, %i, %i \n", len(ini), len(fin), len(E), len(costh) );
-     return boost::python::numeric::array(0); }
-   std::vector<double> result(len(ini));
-   for (int i = 0; i< len(ini); i++){ 
-      result[i] = MatterProbPDG(boost::python::extract<int>(ini[i].attr("__int__")()), 
-                                boost::python::extract<int>(fin[i].attr("__int__")()),
-                                boost::python::extract<double>(E[i]), 
-                                boost::python::extract<double>(costh[i]) ) ; }
-   /*for (int i = 0 ; i < len(ini); i++){
-      std::cout<<boost::python::extract<double>(E[i])<<"\t"<<boost::python::extract<double>(costh[i])<<"\t"<<result[i]<<std::endl;
-   }*/
-   npy_intp size = result.size();
-   double * data = (double*)malloc(result.size()*sizeof(double));
-   data = size ? const_cast<double *>(&result[0]) 
-        : static_cast<double *>(NULL); 
-   PyObject * pyObj;
-   pyObj = PyArray_SimpleNewFromData( 1, &size, NPY_DOUBLE, data );
-   boost::python::handle<> handle( pyObj );
-   boost::python::numeric::array arr( handle );
-   return arr.copy();
-}
 /*
   Sets layers of the Earth 
 */

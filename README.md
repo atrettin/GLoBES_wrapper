@@ -7,6 +7,8 @@ Author: Andrii Terliuk
 
 ### Install GLoBES
 
+First, load CVMFS software v. 4.0.1 into your environment!
+
 Install GLoBES, currently available stable version is 3.0.11
 Go to some folder and do: 
 ```
@@ -37,7 +39,7 @@ prefix=<put/your/path/to/GLoBES/prefix/here>
 ```
 and then do 
 ```
-make all
+make
 make install
 ```
 
@@ -45,7 +47,7 @@ make install
 
 After this you need to compile a Python interface for SNU extension. 
 First, put location of your GLoBES/SNU extension installation as `prefix` to Makefile
-Then run `make`. 
+Then run `make` and `make install`.
 You should see `GLoBES.so` file and now it should be ready to use. 
 
 ## Testing the installation 

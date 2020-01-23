@@ -1,5 +1,5 @@
 #connecting globes
-prefix = /afs/ifh.de/user/t/terliuk/scratch/software/GLoBES_v311/installed/
+prefix = /afs/ifh.de/user/t/trettin/scratch/software/GLoBES_v401/installed/
 exec_prefix = ${prefix}
 libdir = ${exec_prefix}/lib
 globesconf= $(exec_prefix)/bin/globes-config
