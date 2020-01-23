@@ -7,7 +7,10 @@ Author: Andrii Terliuk
 
 ### Install GLoBES
 
-First, load CVMFS software v. 4.0.1 into your environment!
+First, load CVMFS software v. 4.0.1 into your environment! This is only necessary at compile time, 
+the paths to the libraries are baked into the library by setting RPATH. It should then be 
+possible to use the library from any environment, provided that CVMFS is reachable and 
+paths didn't change. 
 
 Install GLoBES, currently available stable version is 3.0.11
 Go to some folder and do: 
@@ -46,9 +49,13 @@ make install
 ### Install wrapper
 
 After this you need to compile a Python interface for SNU extension. 
-First, put location of your GLoBES/SNU extension installation as `prefix` to Makefile
-Then run `make` and `make install`.
-You should see `GLoBES.so` file and now it should be ready to use. 
+First, put location of your GLoBES/SNU extension installation as `prefix` to Makefile,
+then run `make` and `make install`.
+You should see `GLoBES.so` file and now it should be ready to use.
+
+You can check whether the library will work in your environment by running 
+`ldd -r GLoBES.so`. If it finds all the libraries and no undefined symbols,
+you are good to go. 
 
 ## Testing the installation 
 
